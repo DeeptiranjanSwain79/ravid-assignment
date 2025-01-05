@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "815876125015",
+    "project_id": "test1-xyz",
+    "storage_bucket": "test1-xyz.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815876125015:android:5139ff3c184fcf37c4ce12",
+        "android_client_info": {
+          "package_name": "com.deeptiranjan79.RAVID"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkEv8gKF4D-KCPit1BgUezB_Slna7ruOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815876125015:android:fa98429fb789acf0c4ce12",
+        "android_client_info": {
+          "package_name": "dev.expo.exponotificationseas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkEv8gKF4D-KCPit1BgUezB_Slna7ruOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
