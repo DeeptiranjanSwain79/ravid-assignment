@@ -4,23 +4,27 @@ import { Redirect } from "expo-router";
 import Loader from "@/components/loader/Loader";
 import useUser from "@/hooks/auth/useUser";
 
+// const TabsIndex = () => {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//     const { loading, user } = useUser();
+//     useEffect(() => {
+//       if (user != undefined || user != null) {
+//         setIsLoggedIn(true);
+//       }
+//     }, [user]);
+//   return (
+//     <>
+//       {loading ? (
+//         <Loader />
+//       ) : (
+//         <Redirect href={isLoggedIn ? "/(tabs)" : "/(routes)/signin"} />
+//       )}
+//     </>
+//   );
+// };
+
 const TabsIndex = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const { loading, user } = useUser();
-    useEffect(() => {
-      if (user != undefined || user != null) {
-        setIsLoggedIn(true);
-      }
-    }, [user]);
-  return (
-    <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <Redirect href={isLoggedIn ? "/(tabs)" : "/(routes)/signin"} />
-      )}
-    </>
-  );
+  return <Redirect href={"/(tabs)"} />;
 };
 
 export default TabsIndex;

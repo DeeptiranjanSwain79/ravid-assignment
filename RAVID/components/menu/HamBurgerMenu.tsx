@@ -113,7 +113,10 @@ const HamburgerMenu: React.FC = () => {
                 </Text>
                 <Text
                   style={styles.lastText}
-                  onPress={() => router.push("/(tabs)/settings")}
+                  onPress={() => {
+                    router.push("/(tabs)/settings");
+                    closeMenu();
+                  }}
                 >
                   User Profile Settings
                 </Text>
@@ -137,7 +140,11 @@ const HamburgerMenu: React.FC = () => {
                     styles.menuItem,
                     selectedItem === index && styles.selectedItem, // Apply style if selected
                   ]}
-                  onPress={() => handlePress(index)}
+                  onPress={() => {
+                    handlePress(index);
+                    router.push("/(tabs)");
+                    closeMenu();
+                  }}
                 >
                   <Image source={item.image} style={styles.icon} />
                   <Text style={styles.text}>{item.text}</Text>
@@ -148,7 +155,10 @@ const HamburgerMenu: React.FC = () => {
             <View style={styles.box}>
               <TouchableOpacity
                 style={styles.actionItem}
-                onPress={() => router.push("/(tabs)/dna")}
+                onPress={() => {
+                  router.push("/(tabs)/dna");
+                  closeMenu();
+                }}
               >
                 <AntDesign name="like2" size={32} color="#4287f5" />
                 <Text style={[styles.actionText, { color: "#4287f5" }]}>
@@ -158,7 +168,10 @@ const HamburgerMenu: React.FC = () => {
 
               <TouchableOpacity
                 style={styles.actionItem}
-                onPress={() => router.push("/(tabs)/settings")}
+                onPress={() => {
+                  router.push("/(tabs)/settings");
+                  closeMenu();
+                }}
               >
                 <AntDesign name="logout" size={32} color="red" />
                 <Text style={[styles.actionText, { color: "red" }]}>
