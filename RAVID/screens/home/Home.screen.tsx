@@ -1,141 +1,180 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  StyleSheet,
-  Text,
   View,
-  FlatList,
-  Image,
+  Text,
   TouchableOpacity,
-  ActivityIndicator,
+  StyleSheet,
+  Image,
+  ScrollView,
 } from "react-native";
-import { PrivateAPI } from "@/utils/axios-client";
-import { Toast } from "react-native-toast-notifications";
-import { widthPercentageToDP } from "react-native-responsive-screen";
-import { RelativePathString, router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import icons from "@/assets/icons/icons";
+import { heightPercentageToDP } from "react-native-responsive-screen";
+
+const boxItems = [
+  {
+    id: 1,
+    heading: "Appointments",
+    texts: ["Upcoming Appointments", "Scheduled Appointments", "Reminders"],
+    icon: "calendar",
+  },
+  {
+    id: 2,
+    heading: "Diagnosis",
+    texts: ["QR Code enabled Upload", "2nd Opinion", "My Diagnosis Data"],
+    icon: "folder1",
+  },
+  {
+    id: 3,
+    heading: "Mobile Health",
+    texts: [
+      "Top Doctor's list",
+      "Sleep Quantity Trends",
+      "Blood Pressure Chart",
+    ],
+    icon: "paperclip",
+  },
+  {
+    id: 4,
+    heading: "Notes",
+    texts: ["Add Notes", "Manage Notes"],
+    icon: "edit",
+  },
+  {
+    id: 5,
+    heading: "Prescriptions",
+    texts: ["QR Code enabled Upload", "My Prescriptions"],
+    icon: "trademark",
+  },
+  {
+    id: 6,
+    heading: "Preventive/Services",
+    texts: [
+      "Cancer Screening",
+      "Diabetes Screening",
+      "Genomic Services",
+      "Longevity & Wellness",
+      "Multidisciplinary",
+    ],
+    icon: "medicinebox",
+  },
+];
 
 const HomeScreen = () => {
-  const [allProducts, setAllProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [selectedBox, setSelectedBox] = useState<number | null>(null);
 
-  const getAllProducts = useCallback(async () => {
-    try {
-      const { status, data } = await PrivateAPI.get("/users/products");
-      if (status === 200 && data) {
-        setAllProducts(data.products);
-      }
-    } catch (error: any) {
-      Toast.show(error?.response?.data?.message || error.message, {
-        type: "error",
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    getAllProducts();
-  }, []);
-
-  const renderProduct = ({ item }: any) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() =>
-        router.push({
-          pathname: "/(routes)/product-details" as RelativePathString,
-          params: { data: JSON.stringify(item) },
-        })
-      }
-    >
-      <Image
-        source={{ uri: item?.image! }}
-        style={styles.productImage}
-        onError={(error) =>
-          console.log("Image Load Error:", error.nativeEvent.error)
-        }
-      />
-      <View style={styles.cardContent}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productPrice}>₹{item.price}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
+  const handleSelectBox = (id: number) => {
+    setSelectedBox(id === selectedBox ? null : id); // Toggle selection
+  };
 
   return (
-    <View style={styles.container}>
-      {allProducts.length > 0 ? (
-        <FlatList
-          data={allProducts}
-          renderItem={renderProduct}
-          keyExtractor={(item: any) => item._id}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-        />
-      ) : (
-        <Text style={styles.emptyText}>No products available.</Text>
-      )}
-    </View>
+    <ScrollView
+      contentContainerStyle={styles.scrollContainer}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={styles.container}>
+        {/* Greeting Message */}
+        <View
+          style={{
+            marginBottom: 15,
+            flexDirection: "row",
+            justifyContent: "flex-end", // Align items to the right
+            alignItems: "center", // Center align the items vertically
+          }}
+        >
+          <Image
+            source={icons.morning}
+            style={{
+              width: 24,
+              height: 24,
+              marginRight: 10, // Reduce margin for better spacing
+            }}
+          />
+          <Text style={{ fontSize: 16, fontWeight: "600", color: "#650d0d" }}>
+            Good Morning, Dani
+          </Text>
+        </View>
+
+        {/* Boxes */}
+        <View style={styles.boxContainer}>
+          {boxItems.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={[
+                styles.box,
+                selectedBox === item.id && styles.selectedBox,
+              ]}
+              onPress={() => handleSelectBox(item.id)}
+            >
+              <Text style={styles.boxHeading}>{item.heading}</Text>
+              <View style={{ marginTop: 15 }}>
+                {item.texts.map((text, index) => (
+                  <Text key={index} style={styles.boxText}>
+                    {text}
+                  </Text>
+                ))}
+              </View>
+              <AntDesign
+                name={item.icon as any} // Type assertion to fix the icon type error
+                size={selectedBox === item.id ? 30 : 24} // Icon gets bigger when selected
+                color={selectedBox === item.id ? "#8dc8eb" : "#333"} // Icon color changes when selected
+                style={[
+                  styles.icon,
+                  selectedBox === item.id && { fontSize: 45 },
+                ]}
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    </ScrollView>
   );
 };
-
-export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  listContainer: {
     padding: 16,
   },
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
+  scrollContainer: {
+    paddingBottom: 1, // Ensure there's padding at the bottom for smooth scrolling
+  },
+  boxContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap", // Ensures boxes are arranged in a responsive manner
+    justifyContent: "space-between",
+    width: "100%",
+    height: heightPercentageToDP("100%"),
+  },
+  box: {
+    backgroundColor: "#e0e0e0", // Initial background color (gray)
+    borderRadius: 10,
+    width: "48%", // Two boxes per row
+    padding: 16,
     marginBottom: 16,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    alignItems: "flex-start",
+    position: "relative",
+    height: heightPercentageToDP("25%"),
   },
-  productImage: {
-    width: widthPercentageToDP(86),
-    height: 180,
-    borderRadius: 5,
-    alignSelf: "center",
-    resizeMode: "cover",
-    backgroundColor: "#eaeaea", // Placeholder background
+  selectedBox: {
+    backgroundColor: "#c8d6eb", // Light blue when selected
   },
-  cardContent: {
-    padding: 16,
-  },
-  productName: {
-    fontSize: 16,
+  boxHeading: {
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 8,
     color: "#333",
   },
-  productPrice: {
-    fontSize: 14,
-    color: "#888",
+  boxText: {
+    fontSize: 12,
+    color: "#333",
+    marginBottom: 5,
   },
-  emptyText: {
-    textAlign: "center",
-    fontSize: 16,
-    color: "#555",
-    marginTop: 20,
+  icon: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
   },
 });
+
+export default HomeScreen;
